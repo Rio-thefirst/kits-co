@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rio's KITS & CO. — Authentic & Retro Football Jerseys</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <span><b style="color: #10b981;">RIO</b> KITS & CO.</span>
+        <span class="logo-badge">25/26</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#catalog" onclick="setFilter('all')">All Kits</a>
+        <a href="#catalog" onclick="setFilter('club')">Club Kits</a>
+        <a href="#catalog" onclick="setFilter('retro')">Retro Classics</a>
+        <a href="#catalog" onclick="setFilter('national')">National Teams</a>
+      </nav>
+      <button class="cart-btn" id="openCartBtn">
+        <span>Bag</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="eyebrow">New Season Drop</div>
+        <h1>Match-day shirts, classic crests & custom printing.</h1>
+        <p>
+          Browse authentic home, away, and heritage football jerseys. Click any shirt to zoom in,
+          pick your size, and add custom name &amp; number printing (+&#8358;5,000).
+        </p>
+        <a href="#catalog" class="btn-primary">Browse Collection</a>
+      </div>
+      <div class="hero-card" id="featuredHero"></div>
+    </div>
+  </section>
+
+  <main class="catalog" id="catalog">
+    <div class="container">
+      <div class="catalog-top">
+        <h2>2025/26 Kit Catalog</h2>
+        <div class="filters" id="filterBar">
+          <button class="filter-btn active" data-filter="all">All Jerseys</button>
+          <button class="filter-btn" data-filter="club">Club Kits</button>
+          <button class="filter-btn" data-filter="national">National</button>
+          <button class="filter-btn" data-filter="retro">Retro</button>
+        </div>
+      </div>
+
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </main>
+
+  <!-- Image Preview Modal -->
+  <div class="modal" id="previewModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <img id="modalImg" src="" alt="" />
+      <div class="modal-footer">
+        <div>
+          <strong id="modalTitle"></strong>
+          <div id="modalSub" style="color: var(--muted); font-size: 0.85rem;"></div>
+        </div>
+        <button class="close-btn" id="closeModalBtn" aria-label="Close preview">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-out Cart -->
+  <div class="overlay" id="overlay"></div>
+  <aside class="drawer" id="cartDrawer" aria-label="Shopping bag">
+    <div class="drawer-header">
+      <h3>Your Kit Bag</h3>
+      <button class="close-btn" id="closeCartBtn" aria-label="Close bag">✕</button>
+    </div>
+    <div class="drawer-items" id="cartItems"></div>
+    <div class="drawer-footer">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <span id="cartTotal">&#8358;0</span>
+      </div>
+      <button class="btn-primary" style="width: 100%;" id="checkoutBtn">Checkout Order</button>
+      <div class="checkout-msg" id="checkoutMsg"></div>
+    </div>
+  </aside>
+  <div class="formcontainer">
+    <div class="formchild">
+      <div class="">
+          <h2 style="font-size: 35px;">Quick Inquiry</h2>
+          <p style="color: #94a3b8;">Try out the interactive form below.</p>
+      </div>
+         <form class="inquiryform" action="">
+            <div>
+                <label for="name">Name</label>
+                <br>
+                <input class="inqui" type="text" id="name" placeholder="Winner Aileme" required />
+            </div>
+            <br>
+            <div>
+                <label for="">Email</label>
+                <br>
+                <input class="inqui" type="email" name="email" id="email" placeholder="winner@example.com" required/>
+            </div>
+            <br>
+            <div>
+                <label for="">Message</label>
+                <br>
+                <textarea class="inquir" name="message" id="message" rows="4" placeholder="Tell me what you're thinking of making..."></textarea>
+            </div>
+            <button class="sendm">Send Message</button>
+            <p></p>
+         </form>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> Rio's KITS & CO. Jersey Storefront.</p>
+    </div>
+  </footer>
+
+  <script>
+    const jerseys = [
+      {
+        id: 1,
+        name: "North London Red Home 25/26",
+        league: "Premier Club Edition",
+        category: "club",
+        tag: "Best Seller",
+        price: 15000,
+        image: "https://i.pinimg.com/736x/32/0d/bd/320dbd27bed454df2742c2e20af5d980.jpg",
+        primary: "#dc2626",
+        secondary: "#ffffff",
+        accent: "#fbbf24"
+      },
+      {
+        id: 2,
+        name: "Madrid Royal White 25/26",
+        league: "European Elite",
+        category: "club",
+        tag: "New",
+        price: 15000,
+        image: "https://i.pinimg.com/736x/f5/d2/71/f5d271d3ef0af12fea633132f9f3ec5e.jpg",
+        primary: "#f8fafc",
+        secondary: "#1e3a8a",
+        accent: "#eab308"
+      },
+      {
+        id: 3,
+        name: "Seleção 1998 Heritage",
+        league: "World Cup Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80",
+        primary: "#facc15",
+        secondary: "#15803d",
+        accent: "#1d4ed8"
+      },
+      {
+        id: 4,
+        name: "Super Eagles Spirit 25/26",
+        league: "International Kit",
+        category: "national",
+        tag: "Limited",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+        primary: "#16a34a",
+        secondary: "#ffffff",
+        accent: "#052e16"
+      },
+      {
+        id: 5,
+        name: "Milan Striped Classic 1994",
+        league: "Serie A Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80",
+        primary: "#b91c1c",
+        secondary: "#111827",
+        accent: "#f8fafc"
+      },
+      {
+        id: 6,
+        name: "Azzurri Midnight Away 25/26",
+        league: "National Federation",
+        category: "national",
+        tag: "Away",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80",
+        primary: "#1d4ed8",
+        secondary: "#38bdf8",
+        accent: "#f43f5e"
+      },
+      { 
+        id: 7,
+        name: "North London Red Home 25/26",
+        league: "Premier Club Edition",
+        category: "club",
+        tag: "Best Seller",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1577212017184-80cc0da11082?auto=format&fit=crop&w=800&q=80",
+        primary: "#dc2626",
+        secondary: "#ffffff",
+        accent: "#fbbf24"
+      },
+      {
+        id: 8,
+        name: "Madrid Royal White 25/26",
+        league: "European Elite",
+        category: "club",
+        tag: "New",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80",
+        primary: "#f8fafc",
+        secondary: "#1e3a8a",
+        accent: "#eab308"
+      },
+      {
+        id: 9,
+        name: "Seleção 1998 Heritage",
+        league: "World Cup Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80",
+        primary: "#facc15",
+        secondary: "#15803d",
+        accent: "#1d4ed8"
+      },
+      {
+        id: 10,
+        name: "Super Eagles Spirit 25/26",
+        league: "International Kit",
+        category: "national",
+        tag: "Limited",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+        primary: "#16a34a",
+        secondary: "#ffffff",
+        accent: "#052e16"
+      },
+      {
+        id: 11,
+        name: "Milan Striped Classic 1994",
+        league: "Serie A Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80",
+        primary: "#b91c1c",
+        secondary: "#111827",
+        accent: "#f8fafc"
+      },
+      {
+        id: 12,
+        name: "Azzurri Midnight Away 25/26",
+        league: "National Federation",
+        category: "national",
+        tag: "Away",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80",
+        primary: "#1d4ed8",
+        secondary: "#38bdf8",
+        accent: "#f43f5e"
+      },
+      {
+        id: 13,
+        name: "North London Red Home 25/26",
+        league: "Premier Club Edition",
+        category: "club",
+        tag: "Best Seller",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1577212017184-80cc0da11082?auto=format&fit=crop&w=800&q=80",
+        primary: "#dc2626",
+        secondary: "#ffffff",
+        accent: "#fbbf24"
+      },
+      {
+        id: 14,
+        name: "Madrid Royal White 25/26",
+        league: "European Elite",
+        category: "club",
+        tag: "New",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80",
+        primary: "#f8fafc",
+        secondary: "#1e3a8a",
+        accent: "#eab308"
+      },
+      {
+        id: 15,
+        name: "Seleção 1998 Heritage",
+        league: "World Cup Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80",
+        primary: "#facc15",
+        secondary: "#15803d",
+        accent: "#1d4ed8"
+      },
+      {
+        id: 16,
+        name: "Super Eagles Spirit 25/26",
+        league: "International Kit",
+        category: "national",
+        tag: "Limited",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+        primary: "#16a34a",
+        secondary: "#ffffff",
+        accent: "#052e16"
+      },
+      {
+        id: 17,
+        name: "Milan Striped Classic 1994",
+        league: "Serie A Archive",
+        category: "retro",
+        tag: "Retro",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80",
+        primary: "#b91c1c",
+        secondary: "#111827",
+        accent: "#f8fafc"
+      },
+      {
+        id: 18,
+        name: "Azzurri Midnight Away 25/26",
+        league: "National Federation",
+        category: "national",
+        tag: "Away",
+        price: 15000,
+        image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80",
+        primary: "#1d4ed8",
+        secondary: "#38bdf8",
+        accent: "#f43f5e"
+      }
+    ];
+
+    // Automatic offline fallback SVG data URI if an external photo fails to load
+    function fallbackJerseyURI(primary, secondary, accent) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#131c2e"/>
+        <path d="M58 34L22 58L40 90L62 76V172H138V76L160 90L178 58L142 34L122 44C115 52 85 52 78 44L58 34Z"
+              fill="${primary}" stroke="${secondary}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M78 44C85 56 115 56 122 44" stroke="${accent}" stroke-width="6" stroke-linecap="round"/>
+        <rect x="64" y="96" width="72" height="16" fill="${secondary}" opacity="0.9"/>
+      </svg>`;
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Populate Hero Featured Card
+    const featured = jerseys[0];
+    document.getElementById("featuredHero").innerHTML = `
+      <div class="hero-img-wrap">
+        <img
+          src="${featured.image}"
+          alt="${featured.name}"
+          onerror="this.onerror=null;this.src='${fallbackJerseyURI(featured.primary, featured.secondary, featured.accent)}'"
+        />
+      </div>
+      <div class="hero-card-info">
+        <div>
+          <strong>${featured.name}</strong>
+          <small>${featured.league} • &#8358;${featured.price}</small>
+        </div>
+        <button class="btn-primary" style="padding: 9px 14px; font-size: 0.85rem;" onclick="addToCart(${featured.id})">
+          Quick Add
+        </button>
+      </div>
+    `;
+
+    let activeFilter = "all";
+    const selectedSizes = {};
+    jerseys.forEach((j) => (selectedSizes[j.id] = "M"));
+
+    const productGrid = document.getElementById("productGrid");
+
+    function renderCatalog() {
+      const list = activeFilter === "all"
+        ? jerseys
+        : jerseys.filter((j) => j.category === activeFilter);
+
+      productGrid.innerHTML = list.map((item) => {
+        const fallback = fallbackJerseyURI(item.primary, item.secondary, item.accent);
+        return `
+          <article class="product-card">
+            <div class="jersey-stage" onclick="openPreview(${item.id})">
+              <span class="tag">${item.tag}</span>
+              <img
+                src="${item.image}"
+                alt="${item.name}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${fallback}'"
+              />
+              <span class="zoom-hint">Click to zoom</span>
+            </div>
+            <div class="product-body">
+              <div class="product-title">${item.name}</div>
+              <div class="product-sub">${item.league}</div>
+              <div class="price-row">
+                <span class="price">&#8358;${item.price}</span>
+                <span style="font-size:0.8rem; color: var(--muted);">+ &#8358;5,000 printing</span>
+              </div>
+
+              <div class="sizes">
+                ${["S", "M", "L", "XL"].map((sz) => `
+                  <button
+                    type="button"
+                    class="size-pill ${selectedSizes[item.id] === sz ? "selected" : ""}"
+                    onclick="selectSize(${item.id}, '${sz}')"
+                  >${sz}</button>
+                `).join("")}
+              </div>
+
+              <div class="custom-inputs">
+                <input type="text" id="name-${item.id}" placeholder="Name (optional)" maxlength="14" />
+                <input type="number" id="num-${item.id}" placeholder="#" min="1" max="99" />
+              </div>
+
+              <button class="add-btn" onclick="addToCart(${item.id})">Add to Bag</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function selectSize(id, size) {
+      selectedSizes[id] = size;
+      renderCatalog();
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.filter === filter);
+      });
+      renderCatalog();
+    }
+
+    document.getElementById("filterBar").addEventListener("click", (e) => {
+      if (e.target.matches(".filter-btn")) {
+        setFilter(e.target.dataset.filter);
+      }
+    });
+
+    // Image Preview Modal
+    const previewModal = document.getElementById("previewModal");
+    function openPreview(id) {
+      const item = jerseys.find((j) => j.id === id);
+      const modalImg = document.getElementById("modalImg");
+      modalImg.src = item.image;
+      modalImg.alt = item.name;
+      modalImg.onerror = () => {
+        modalImg.src = fallbackJerseyURI(item.primary, item.secondary, item.accent);
+      };
+      document.getElementById("modalTitle").textContent = `${item.name} — ₦${item.price}`;
+      document.getElementById("modalSub").textContent = item.league;
+      previewModal.classList.add("open");
+    }
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      previewModal.classList.remove("open");
+    });
+
+    previewModal.addEventListener("click", (e) => {
+      if (e.target === previewModal) previewModal.classList.remove("open");
+    });
+
+    // Cart State
+    let cart = [];
+
+    function addToCart(id) {
+      const item = jerseys.find((j) => j.id === id);
+      const size = selectedSizes[id] || "M";
+      const nameInput = document.getElementById(`name-${id}`);
+      const numInput = document.getElementById(`num-${id}`);
+      const customName = nameInput ? nameInput.value.trim().toUpperCase() : "";
+      const customNum = numInput ? numInput.value.trim() : "";
+      const hasPrinting = Boolean(customName || customNum);
+      const finalPrice = item.price + (hasPrinting ? 15 : 0);
+
+      cart.push({
+        uid: Date.now() + Math.random(),
+        name: item.name,
+        image: item.image,
+        fallback: fallbackJerseyURI(item.primary, item.secondary, item.accent),
+        size,
+        printing: hasPrinting ? `${customName || "PLAYER"} #${customNum || "10"}` : "No printing",
+        price: finalPrice
+      });
+
+      if (nameInput) nameInput.value = "";
+      if (numInput) numInput.value = "";
+      updateCartUI();
+      openCart();
+    }
+
+    function removeFromCart(uid) {
+      cart = cart.filter((c) => c.uid !== uid);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      document.getElementById("cartCount").textContent = cart.length;
+      const itemsEl = document.getElementById("cartItems");
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      document.getElementById("cartTotal").textContent = `$${total}`;
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<p style="color: var(--muted);">Your bag is empty. Pick a jersey to get started.</p>`;
+        return;
+      }
+
+      itemsEl.innerHTML = cart.map((item) => `
+        <div class="cart-item">
+          <img
+            class="cart-thumb"
+            src="${item.image}"
+            alt="${item.name}"
+            onerror="this.onerror=null;this.src='${item.fallback}'"
+          />
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <p>Size: <strong>${item.size}</strong> • ${item.printing}</p>
+            <p style="color: var(--accent); font-weight: 700; margin-top: 3px;">$${item.price}</p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart(${item.uid})">Remove</button>
+        </div>
+      `).join("");
+    }
+
+    const drawer = document.getElementById("cartDrawer");
+    const overlay = document.getElementById("overlay");
+    const checkoutMsg = document.getElementById("checkoutMsg");
+
+    function openCart() {
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      checkoutMsg.textContent = "";
+    }
+
+    function closeCart() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+    }
+
+    document.getElementById("openCartBtn").addEventListener("click", openCart);
+    document.getElementById("closeCartBtn").addEventListener("click", closeCart);
+    overlay.addEventListener("click", closeCart);
+
+    document.getElementById("checkoutBtn").addEventListener("click", () => {
+      if (cart.length === 0) {
+        checkoutMsg.textContent = "Add at least one jersey before checking out.";
+        return;
+      }
+      cart = [];
+      updateCartUI();
+      checkoutMsg.textContent = "Order placed! (Checkout complete)";
+    });
+
+    renderCatalog();
+    updateCartUI();
+  </script>
+</body>
+</html>
